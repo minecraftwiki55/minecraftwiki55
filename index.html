@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Code Showcase</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/themes/prism-okaidia.min.css">
@@ -16,7 +16,7 @@
             direction: ltr;
         }
         .container {
-            max-width: 800px;
+            max-width: 100%;
             margin: 0 auto;
             background-color: #1e1e1e;
             padding: 20px;
@@ -174,69 +174,17 @@
     <div class="container glow">
         <h1 id="title">Code Showcase</h1>
         <pre><code id="code" class="language-javascript">// Write your code here
-
-
-window.addEventListener('load', function() {
-    const cssLinks = document.querySelectorAll('link[rel="stylesheet"]');
-    const jsScripts = document.querySelectorAll('script[src]');
-    const files = [];
-
-    // أضف ملفات HTML
-    
-    
-    const htmlContent = document.documentElement.outerHTML;
-    files.push({ name: "index.html", content: htmlContent });
-
-    // أضف ملفات CSS
-    
-    
-    cssLinks.forEach(link => {
-        files.push({ url: link.href, name: "css/" + link.href.split('/').pop() });
-    });
-
-    // أضف ملفات JavaScript
-    
-    
-    jsScripts.forEach(script => {
-        files.push({ url: script.src, name: "js/" + script.src.split('/').pop() });
-    });
-
-    async function downloadFiles() {
-        for (const file of files) {
-            if (file.url) {
-                await fetch(file.url)
-                    .then(response => response.text())
-                    .then(data => {
-                        file.content = data;
-                    })
-                    .catch(err => console.error("Error fetching file:", err));
-            }
-        }
-        createAndDownloadZip(files);
-    }
-
-    function createAndDownloadZip(files) {
-        const zipBlob = new Blob(
-            files.map(file => new Blob([file.content], { type: 'text/plain' })),
-            { type: "application/zip" }
-        );
-        
-        const a = document.createElement("a");
-        a.href = URL.createObjectURL(zipBlob);
-        a.download = "website.zip";
-        a.click();
-    }
-
-    downloadFiles();
-});
+function sayHello() {
+    console.log("Hello, World!");
+}
         </code></pre>
         <button class="copy-btn" onclick="copyCode()">Copy</button>
     </div>
 
     <div class="social-links glow">
-        <a href="https://github.com"  class="fab fa-github"></a>
-        <a href="https://www.youtube.com"  class="fab fa-youtube"></a>
-        <a href="https://www.instagram.com" class="fab fa-instagram"></a>
+        <a href="https://github.com" target="_blank" class="fab fa-github"></a>
+        <a href="https://www.youtube.com" target="_blank" class="fab fa-youtube"></a>
+        <a href="https://www.instagram.com" target="_blank" class="fab fa-instagram"></a>
     </div>
 
     <div class="comments-section glow">
@@ -255,6 +203,10 @@ window.addEventListener('load', function() {
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/prism.min.js"></script>
     <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            loadComments();
+        });
+
         function copyCode() {
             const code = document.getElementById('code').innerText;
             navigator.clipboard.writeText(code).then(() => {
@@ -267,29 +219,15 @@ window.addEventListener('load', function() {
             const commentText = document.getElementById('comment').value;
 
             if (username && commentText) {
-                const commentContainer = document.createElement('div');
-                commentContainer.classList.add('comment');
-                commentContainer.innerHTML = `
-                    <strong>${username}</strong>
-                    <p>${commentText}</p>
-                    <div class="actions">
-                        <button onclick="likeComment(this)" class="like-btn">Like <span>0</span></button>
-                        <button onclick="replyToComment(this)" class="reply-btn">Reply</button>
-                    </div>
-                    <div class="reply-box" style="display: none;">
-                        <input type="text" placeholder="Your name">
-                        <textarea rows="2" placeholder="Write your reply here..."></textarea>
-                        <button onclick="submitReply(this)">Submit Reply</button>
-                    </div>
-                `;
+                const comment = {
+                    username: username,
+                    commentText: commentText,
+                    likes: 0,
+                    replies: []
+                };
 
-                const commentsContainer = document.getElementById('commentsContainer');
-                commentsContainer.appendChild(commentContainer);
-
-                commentContainer.classList.add('comment-animate');
-                setTimeout(() => {
-                    commentContainer.classList.remove('comment-animate');
-                }, 500);
+                saveComment(comment);
+                renderComment(comment);
 
                 document.getElementById('username').value = '';
                 document.getElementById('comment').value = '';
@@ -298,50 +236,108 @@ window.addEventListener('load', function() {
             }
         }
 
-function likeComment(button) {
-    let likesCount = parseInt(button.querySelector('span').innerText);
-    likesCount++;
-    button.querySelector('span').innerText = likesCount;
+        function saveComment(comment) {
+            let comments = JSON.parse(localStorage.getItem('comments')) || [];
+            comments.push(comment);
+            localStorage.setItem('comments', JSON.stringify(comments));
+        }
 
-    button.classList.add('like-animate');
-    setTimeout(() => {
-        button.classList.remove('like-animate');
-    }, 300);
-}
+        function loadComments() {
+            const comments = JSON.parse(localStorage.getItem('comments')) || [];
+            comments.forEach(renderComment);
+        }
 
-function replyToComment(button) {
-    const replyBox = button.parentNode.nextElementSibling;
-    replyBox.style.display = replyBox.style.display === 'none' ? 'block' : 'none';
-}
+        function renderComment(comment) {
+            const commentContainer = document.createElement('div');
+            commentContainer.classList.add('comment');
+            commentContainer.innerHTML = `
+                <strong>${comment.username}</strong>
+                <p>${comment.commentText}</p>
+                <div class="actions">
+                    <button onclick="likeComment(this)" class="like-btn">Like <span>${comment.likes}</span></button>
+                    <button onclick="replyToComment(this)" class="reply-btn">Reply</button>
+                </div>
+                <div class="reply-box" style="display: none;">
+                    <input type="text" placeholder="Your name">
+                    <textarea rows="2" placeholder="Write your reply here..."></textarea>
+                    <button onclick="submitReply(this)">Submit Reply</button>
+                </div>`;
 
-function submitReply(button) {
-    const replyBox = button.parentNode;
-    const replyUsername = replyBox.querySelector('input').value;
-    const replyText = replyBox.querySelector('textarea').value;
+            const commentsContainer = document.getElementById('commentsContainer');
+            commentsContainer.appendChild(commentContainer);
+        }
 
-    if (replyUsername && replyText) {
-        const replyContainer = document.createElement('div');
-        replyContainer.classList.add('comment');
-        replyContainer.style.marginLeft = '20px';
-        replyContainer.innerHTML = `
-            <strong>${replyUsername}</strong>
-            <p>${replyText}</p>
-        `;
+        function likeComment(button) {
+            let likesCount = parseInt(button.querySelector('span').innerText);
+            likesCount++;
+            button.querySelector('span').innerText = likesCount;
 
-        replyBox.parentNode.appendChild(replyContainer);
+            // Save the updated like count
+            const commentIndex = Array.from(button.closest('.comment').parentNode.children).indexOf(button.closest('.comment'));
+            let comments = JSON.parse(localStorage.getItem('comments'));
+            comments[commentIndex].likes = likesCount;
+            localStorage.setItem('comments', JSON.stringify(comments));
 
-        replyContainer.classList.add('comment-animate');
-        setTimeout(() => {
-            replyContainer.classList.remove('comment-animate');
-        }, 500);
+            button.classList.add('like-animate');
+            setTimeout(() => {
+                button.classList.remove('like-animate');
+            }, 300);
+        }
 
-        replyBox.querySelector('input').value = '';
-        replyBox.querySelector('textarea').value = '';
-        replyBox.style.display = 'none';
-    } else {
-        alert('Please fill out all fields.');
-    }
-}
+        function replyToComment(button) {
+            const replyBox = button.parentNode.nextElementSibling;
+            replyBox.style.display = replyBox.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function submitReply(button) {
+            const replyBox = button.parentNode;
+            const replyUsername = replyBox.querySelector('input').value;
+            const replyText = replyBox.querySelector('textarea').value;
+
+            if (replyUsername && replyText) {
+                const replyContainer = document.createElement('div');
+                replyContainer.classList.add('comment');
+                replyContainer.style.marginLeft = '20px';
+                replyContainer.innerHTML = `
+                    <strong>${replyUsername}</strong>
+                    <p>${replyText}</p>
+                `;
+
+                replyBox.parentNode.appendChild(replyContainer);
+
+                const commentIndex = Array.from(replyBox.closest('.comment').parentNode.children).indexOf(replyBox.closest('.comment'));
+                let comments = JSON.parse(localStorage.getItem('comments'));
+                comments[commentIndex].replies.push({ username: replyUsername, replyText: replyText });
+                localStorage.setItem('comments', JSON.stringify(comments));
+
+                replyBox.querySelector('input').value = '';
+                replyBox.querySelector('textarea').value = '';
+                replyBox.style.display = 'none';
+
+                replyContainer.classList.add('comment-animate');
+                setTimeout(() => {
+                    replyContainer.classList.remove('comment-animate');
+                }, 500);
+            } else {
+                alert('Please fill out all fields.');
+            }
+        }
+
+        // Prevent page zoom
+        document.addEventListener('wheel', function(e) {
+            if (e.ctrlKey) {
+                e.preventDefault();
+            }
+        }, { passive: false });
+
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey && (e.key === '+' || e.key === '-' || e.key === '0')) {
+                e.preventDefault();
+            }
+        });
+
+        // Load comments on page load
+        window.onload = loadComments;
     </script>
 </body>
-</html>
+    </html>
