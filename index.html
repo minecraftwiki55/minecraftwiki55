@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Code Showcase</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/themes/prism-okaidia.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #121212;
+            color: #f4f4f4;
+            direction: ltr;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #1e1e1e;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(128, 0, 128, 0.6);
+            position: relative;
+        }
+        h1 {
+            color: #bb86fc;
+            text-align: center;
+        }
+        pre {
+            background-color: #282c34;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            position: relative;
+            font-size: 16px;
+            user-select: none;
+        }
+        code {
+            font-family: "Courier New", Courier, monospace;
+        }
+        .copy-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background-color: #bb86fc;
+            color: #121212;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+        .copy-btn:hover {
+            background-color: #9b6bbf;
+            transform: scale(1.05);
+        }
+        .glow {
+            animation: glowAnimation 1.5s infinite alternate;
+        }
+        @keyframes glowAnimation {
+            from {
+                box-shadow: 0 0 5px #bb86fc;
+            }
+            to {
+                box-shadow: 0 0 15px #bb86fc;
+            }
+        }
+        .social-links {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            border-radius: 8px;
+            background-color: #1e1e1e;
+            box-shadow: 0 0 15px rgba(128, 0, 128, 0.6);
+        }
+        .social-links a {
+            color: #bb86fc;
+            font-size: 50px;
+            margin: 0 20px;
+            transition: color 0.3s ease, transform 0.3s ease;
+        }
+        .social-links a:hover {
+            color: #9b6bbf;
+            transform: scale(1.2);
+        }
+        .comments-section {
+            margin-top: 40px;
+            background-color: #1e1e1e;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(128, 0, 128, 0.6);
+        }
+        .comments-section h2 {
+            color: #bb86fc;
+            margin-bottom: 15px;
+        }
+        .comment-box {
+            background-color: #282c34;
+            color: #abb2bf;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .comment-box input, .comment-box textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0 10px;
+            border-radius: 5px;
+            border: none;
+            background-color: #1e1e1e;
+            color: #f4f4f4;
+        }
+        .comment-box button {
+            background-color: #bb86fc;
+            color: #121212;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+        .comment-box button:hover {
+            background-color: #9b6bbf;
+            transform: scale(1.05);
+        }
+        .comment {
+            background-color: #2c2f33;
+            padding: 10px 15px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            position: relative;
+        }
+        .comment .actions {
+            display: flex;
+            gap: 10px;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+        .comment .actions button {
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+            color: #bb86fc;
+            transition: color 0.3s ease, transform 0.3s ease;
+        }
+        .comment .actions button:hover {
+            color: #9b6bbf;
+            transform: scale(1.1);
+        }
+        .comment .reply-box {
+            margin-top: 10px;
+            padding-left: 20px;
+        }
+        .comment .reply-box input, .comment .reply-box textarea {
+            width: calc(100% - 20px);
+            margin-top: 5px;
+        }
+        .comment .reply-box button {
+            margin-top: 5px;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            color: #9b6bbf;
+        }
+    </style>
+</head>
+<body>
+    <div class="container glow">
+        <h1 id="title">Code Showcase</h1>
+        <pre><code id="code" class="language-javascript">// Write your code here
+
+
+window.addEventListener('load', function() {
+    const cssLinks = document.querySelectorAll('link[rel="stylesheet"]');
+    const jsScripts = document.querySelectorAll('script[src]');
+    const files = [];
+
+    // أضف ملفات HTML
+    
+    
+    const htmlContent = document.documentElement.outerHTML;
+    files.push({ name: "index.html", content: htmlContent });
+
+    // أضف ملفات CSS
+    
+    
+    cssLinks.forEach(link => {
+        files.push({ url: link.href, name: "css/" + link.href.split('/').pop() });
+    });
+
+    // أضف ملفات JavaScript
+    
+    
+    jsScripts.forEach(script => {
+        files.push({ url: script.src, name: "js/" + script.src.split('/').pop() });
+    });
+
+    async function downloadFiles() {
+        for (const file of files) {
+            if (file.url) {
+                await fetch(file.url)
+                    .then(response => response.text())
+                    .then(data => {
+                        file.content = data;
+                    })
+                    .catch(err => console.error("Error fetching file:", err));
+            }
+        }
+        createAndDownloadZip(files);
+    }
+
+    function createAndDownloadZip(files) {
+        const zipBlob = new Blob(
+            files.map(file => new Blob([file.content], { type: 'text/plain' })),
+            { type: "application/zip" }
+        );
+        
+        const a = document.createElement("a");
+        a.href = URL.createObjectURL(zipBlob);
+        a.download = "website.zip";
+        a.click();
+    }
+
+    downloadFiles();
+});
+        </code></pre>
+        <button class="copy-btn" onclick="copyCode()">Copy</button>
+    </div>
+
+    <div class="social-links glow">
+        <a href="https://github.com"  class="fab fa-github"></a>
+        <a href="https://www.youtube.com"  class="fab fa-youtube"></a>
+        <a href="https://www.instagram.com" class="fab fa-instagram"></a>
+    </div>
+
+    <div class="comments-section glow">
+        <h2>Comments</h2>
+        <div class="comment-box">
+            <input type="text" id="username" placeholder="Your name">
+            <textarea id="comment" rows="4" placeholder="Write your comment here..."></textarea>
+            <button onclick="addComment()">Add Comment</button>
+        </div>
+        <div id="commentsContainer"></div>
+    </div>
+
+    <div class="footer">
+        &copy; 2024 All rights reserved.
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/prism.min.js"></script>
+    <script>
+        function copyCode() {
+            const code = document.getElementById('code').innerText;
+            navigator.clipboard.writeText(code).then(() => {
+                alert('Code copied!');
+            });
+        }
+
+        function addComment() {
+            const username = document.getElementById('username').value;
+            const commentText = document.getElementById('comment').value;
+
+            if (username && commentText) {
+                const commentContainer = document.createElement('div');
+                commentContainer.classList.add('comment');
+                commentContainer.innerHTML = `
+                    <strong>${username}</strong>
+                    <p>${commentText}</p>
+                    <div class="actions">
+                        <button onclick="likeComment(this)" class="like-btn">Like <span>0</span></button>
+                        <button onclick="replyToComment(this)" class="reply-btn">Reply</button>
+                    </div>
+                    <div class="reply-box" style="display: none;">
+                        <input type="text" placeholder="Your name">
+                        <textarea rows="2" placeholder="Write your reply here..."></textarea>
+                        <button onclick="submitReply(this)">Submit Reply</button>
+                    </div>
+                `;
+
+                const commentsContainer = document.getElementById('commentsContainer');
+                commentsContainer.appendChild(commentContainer);
+
+                commentContainer.classList.add('comment-animate');
+                setTimeout(() => {
+                    commentContainer.classList.remove('comment-animate');
+                }, 500);
+
+                document.getElementById('username').value = '';
+                document.getElementById('comment').value = '';
+            } else {
+                alert('Please fill out all fields.');
+            }
+        }
+
+function likeComment(button) {
+    let likesCount = parseInt(button.querySelector('span').innerText);
+    likesCount++;
+    button.querySelector('span').innerText = likesCount;
+
+    button.classList.add('like-animate');
+    setTimeout(() => {
+        button.classList.remove('like-animate');
+    }, 300);
+}
+
+function replyToComment(button) {
+    const replyBox = button.parentNode.nextElementSibling;
+    replyBox.style.display = replyBox.style.display === 'none' ? 'block' : 'none';
+}
+
+function submitReply(button) {
+    const replyBox = button.parentNode;
+    const replyUsername = replyBox.querySelector('input').value;
+    const replyText = replyBox.querySelector('textarea').value;
+
+    if (replyUsername && replyText) {
+        const replyContainer = document.createElement('div');
+        replyContainer.classList.add('comment');
+        replyContainer.style.marginLeft = '20px';
+        replyContainer.innerHTML = `
+            <strong>${replyUsername}</strong>
+            <p>${replyText}</p>
+        `;
+
+        replyBox.parentNode.appendChild(replyContainer);
+
+        replyContainer.classList.add('comment-animate');
+        setTimeout(() => {
+            replyContainer.classList.remove('comment-animate');
+        }, 500);
+
+        replyBox.querySelector('input').value = '';
+        replyBox.querySelector('textarea').value = '';
+        replyBox.style.display = 'none';
+    } else {
+        alert('Please fill out all fields.');
+    }
+}
+    </script>
+</body>
+</html>
